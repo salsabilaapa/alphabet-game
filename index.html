@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Petualangan ABC Kids - Bilingual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+<div id="game-window">
+    <div class="header">
+        <button class="btn-icon" onclick="showScreen('menu-screen')" title="Home">🏠</button>
+        <span class="header-title">ALPHABET GAMES</span>
+        <button class="btn-icon" onclick="toggleMusic()">🎵</button>
+    </div>
+
+    <div id="menu-screen" class="screen active">
+        <div class="hero-section">
+            <div class="hero-emoji">🦁</div>
+            <h1 class="hero-title">ABC Fun Learning</h1>
+            <p class="hero-subtitle">Inggris & Indonesia</p>
+        </div>
+        
+        <div class="menu-grid">
+            <div class="menu-card" onclick="startLearnMode()" style="border-color: var(--secondary);">
+                <div class="menu-icon">📚</div>
+                <div class="menu-text"><h3>Learn</h3><small>Flash Cards</small></div>
+            </div>
+            <div class="menu-card" onclick="startQuizMode()" style="border-color: var(--primary);">
+                <div class="menu-icon">📦</div>
+                <div class="menu-text"><h3>Quiz</h3><small>Feed the Animal</small></div>
+            </div>
+             <div class="menu-card" onclick="startMemoryMode()" style="border-color: var(--accent);">
+                <div class="menu-icon">🧩</div>
+                <div class="menu-text"><h3>Memory</h3><small>Find the Pair</small></div>
+            </div>
+            <div class="menu-card" onclick="startMatchMode()" style="border-color: var(--purple);">
+                <div class="menu-icon">🔗</div>
+                <div class="menu-text"><h3>Match</h3><small>Click and Connect</small></div>
+            </div>
+            <div class="menu-card" onclick="startListeningMode()" style="border-color: var(--blue);">
+                <div class="menu-icon">👂</div>
+                <div class="menu-text"><h3>Guess</h3><small>Listen to the Sound</small></div>
+            </div>
+            <div class="menu-card" onclick="startScrambleMode()" style="border-color: var(--orange);">
+                <div class="menu-icon">🔠</div>
+                <div class="menu-text"><h3>Word Scramble</h3><small>Arrange the Letters</small></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; text-align: center;">
+            <a href="https://saweria.co/Sazhaript" target="_blank" class="btn-support">
+                🎁 Dukung Pembuat Game
+            </a>
+        </div>
+    </div>
+
+    <div id="learn-screen" class="screen">
+        <h2>Pencet Hurufnya!</h2>
+        <div class="learn-grid" id="learn-container"></div>
+    </div>
+
+    <div id="focus-overlay">
+        <button class="btn-icon close-focus" onclick="closeFocus()">✖</button>
+        <div id="focus-icon" onclick="replaySound()">🍎</div>
+        <h1 id="focus-letter">A</h1>
+        <div class="focus-text-box">
+            <div id="focus-word-en" class="text-en">Apple</div>
+            <div id="focus-word-id" class="text-id">Apel</div>
+        </div>
+        <p class="tap-hint">(Klik gambar untuk dengar)</p>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <div class="quiz-container">
+            <div class="quiz-left">
+                <h3 class="quiz-instruction">Apa yang berawalan huruf ini?</h3>
+                <div id="target-box" class="hungry-box">
+                    <div class="box-label" id="quiz-letter">A</div>
+                    <div class="box-mouth"></div>
+                </div>
+                <div id="quiz-clue" class="sentence-bubble">
+                    Clue: I eat a red Apple
+                </div>
+            </div>
+            <div class="quiz-right">
+                <div class="items-rack" id="quiz-options"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="memory-screen" class="screen">
+        <h2>Cari Pasangan!</h2>
+        <div class="memory-grid" id="memory-board"></div>
+    </div>
+
+    <div id="match-screen" class="screen">
+        <h2 style="color:var(--purple)">Klik & Sambung!</h2>
+        <p class="sub-instruction">Klik gambar, lalu klik hurufnya</p>
+        <div class="match-container" id="match-area">
+            <canvas id="match-canvas"></canvas>
+            <div class="match-column" id="match-left"></div>
+            <div class="match-column" id="match-right"></div>
+        </div>
+    </div>
+
+    <div id="listening-screen" class="screen">
+        <h2 style="color:var(--blue)">Dengar & Pilih!</h2>
+        <div class="listen-container">
+            <div class="listen-btn-large" onclick="playTargetSound()">🔊</div>
+            <div class="listen-options" id="listen-options"></div>
+        </div>
+    </div>
+
+    <div id="scramble-screen" class="screen">
+        <h2 style="color:var(--orange)">Susun Huruf!</h2>
+        <div class="scramble-container">
+            <div id="scramble-icon" class="game-image">🍎</div>
+            <div id="scramble-slots" class="word-slots"></div>
+            <div id="scramble-pool" class="letter-pool"></div>
+        </div>
+    </div>
+
+</div>
+
+<div id="result-modal" class="modal">
+    <div class="modal-card">
+        <div style="font-size: 5rem;">🏆</div>
+        <h2 id="result-title">SELESAI!</h2>
+        <p id="score-text">Skor: 0</p>
+        <button class="btn-main" onclick="goHome()">Main Lagi</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
